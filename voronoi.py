@@ -9,6 +9,11 @@ Key assumptions:
     all supplied inverses in Fi produce original samples of refinement.
     samples are used as representatives of markov partitions
     voronoi style nearest representative is used to determine the partition a sample is in
+    i.e:
+        As per the paper we need an entry in our transition matrix wherever i->j holds
+        I calculate refinements by applying all inverse functions to a sample to generate new list of samples.
+        then I locate i and j as the indice of the nearest sample in the previous iteration,
+        both w.r.t the sample and f(sample) (as new sample is supposed to be an inverse)
 """
 
 
