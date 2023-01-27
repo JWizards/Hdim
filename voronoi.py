@@ -1,6 +1,17 @@
 import numpy as np
 from scipy.optimize import brentq
 
+
+
+"""
+Key assumptions:
+    
+    all supplied inverses in Fi produce original samples of refinement.
+    samples are used as representatives of markov partitions
+    voronoi style nearest representative is used to determine the partition a sample is in
+"""
+
+
 """
     ref_level is refinement level (number of iterations)
     combi is an array of tuples specifying markov partitiion combinatorics (i->j in paper)
