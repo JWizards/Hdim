@@ -1,4 +1,4 @@
-from . import combinatorial
+from .combinatorial import Hdim
 
 for c in np.linspace(0,1,100):
     print("                ------            ")
