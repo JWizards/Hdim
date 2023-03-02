@@ -19,59 +19,63 @@ Key assumptions:
 
 """
     ref_level is refinement level (number of iterations)
-    combi is an array of tuples specifying markov partitiion combinatorics (i->j in paper)
     Xs is samples in markov partition
+    S is symbol selecting func
     F is func (for all partitions) 
     Fi is ARRAY of relevant inverse functions
     Fd is derivative func (for all partitions)
 """
-def Hdim(ref_level , Xs, F, Fi, Fd):
+
+def Hdim(ref_level , Xs, S, F, Fi, Fd):
     
+    Xs = [(x, "") for x in Xs]
+
     #refine and save most recent iterate
-    OldXs = []    
+    OldXs = []
     for i in range(ref_level):
         temp = []
         for x in Xs:
-            for f in Fi:
-                temp.append(f(x))
+            for i in range(len(Fi)):
+                f = Fi[i]
+                xnew = f(x[0])
+                temp.append((xnew, S(xnew) + x[1]))
         OldXs = Xs[:]
         Xs = temp[:]
     
-    #a is element
-    #list of representatives to find closest from
-    #voronoi style!
-    def repIndice(a, reps):
-        return np.argmin(np.abs(np.array(reps)-a))
-    
+
     T = np.zeros((len(OldXs), len(OldXs)))
     for x in Xs:
-        i = repIndice(x, OldXs)
-        j = repIndice(F(x), OldXs)
-        T[i, j] = 1/np.abs(Fd(x))
+        y, symb = x
+        i = int(symb[1:], 2)
+        j = int(symb[:-1], 2)
+        T[i, j] = 1/np.abs(Fd(y))
         
     f = lambda a : np.max(np.abs(np.linalg.eigvals(T**a))) - 1
     mu = brentq(f, 0, 2)
-    
+
     return mu
 
 
-Xs = [1j, -1j]
+S = lambda x : '1' if x.imag >= 0 else '0' 
+
+Xs = [-1 + 0j]
 F = lambda x : x**2
 Fi = [np.sqrt, lambda x : -1*np.sqrt(x)]
 Fd = lambda x : 2*x
 
-for k in range(1, 4):
-    print(Hdim(k, Xs, F, Fi, Fd))
+for k in range(2, 6):
+    print(Hdim(k, Xs, S, F, Fi, Fd))
 
 #okay now with c = -1
 
-Xs = [1j, -1j]
-F = lambda x : x**2
-Fi = [np.sqrt, lambda x : -1*np.sqrt(x)]
-Fd = lambda x : 2*x
+for c in np.linspace(0,1,100):
+    print("                ------            ")
+    print("C = " + str(c))
 
-for k in range(1, 4):
-    print(Hdim(k, Xs, F, Fi, Fd))
+    Xs = [-1 + 0j]
+    F = lambda x : x**2 + c
+    Fi = [lambda x : np.sqrt(x - c), lambda x : -1*np.sqrt(x-c)]
+    Fd = lambda x : 2*x
 
-    
-        
+    for k in range(10,11):
+        print(Hdim(k, Xs, S, F, Fi, Fd))        
