@@ -26,7 +26,7 @@ Key assumptions:
     Fd is derivative func (for all partitions)
 """
 
-def Hdim(ref_level , Xs, S, F, Fi, Fd):
+def Hdim(ref_level , Xs, S, F, Fi, Fd, debug = False):
     
     Xs = [(x, "") for x in Xs]
 
@@ -40,6 +40,8 @@ def Hdim(ref_level , Xs, S, F, Fi, Fd):
                 xnew = f(x[0])
                 temp.append((xnew, S(xnew) + x[1]))
         OldXs = Xs[:]
+        if debug:
+            print(OldXs)
         Xs = temp[:]
     
 
