@@ -1,4 +1,4 @@
-from .combinatorial import Hdim
+from combinatorial import Hdim
 import numpy as np
 
 

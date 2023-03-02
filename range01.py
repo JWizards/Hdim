@@ -1,4 +1,10 @@
-from .combinatorial import Hdim
+from combinatorial import Hdim
+import numpy as np
+
+
+#symbol function
+S = lambda x : '1' if x.imag >= 0 else '0' 
+
 
 for c in np.linspace(0,1,100):
     print("                ------            ")
