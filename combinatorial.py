@@ -53,6 +53,11 @@ def Hdim(ref_level , Xs, S, F, Fi, Fd, debug = False):
         T[i, j] = 1/np.abs(Fd(y))
         
     f = lambda a : np.max(np.abs(np.linalg.eigvals(T**a))) - 1
+
+    print("Solving for ref_level = ", ref_level)
+    for x in np.linspace(0,2, 300):
+        print("f at ", x, " is ", f(x))
+
     mu = brentq(f, 0, 2)
 
     return mu       
